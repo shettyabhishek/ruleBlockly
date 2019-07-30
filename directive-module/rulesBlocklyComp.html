@@ -1,0 +1,359 @@
+<div>
+    <style>
+        #switch {
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            background-color: white;
+            border: solid 1px black;
+            position: absolute;
+            left: 960px;
+            top: 90px;
+        }
+        #blocklyView {background-color: white;border: 1px solid #c6c6c6;color: #049fd9;margin-top: 5px;padding: 5px;
+            font-family: helveticaLight;font-size: 13px;height: 250px;position: absolute;width: calc(100% - 50px);}
+        #blocklyDiv{height: 250px; width: 100%;}
+        #blocklyDiv .blocklyTreeLabel{color: #343434;font-family: helveticaLight;font-size: 13px;}
+        .hint-text{
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            top: 40%;
+            font-size: 15px;
+            color: #cecece;
+        }
+        #jsView{height: 250px;width: 100%;}
+        #jsView #console{height: 100%;width: 100%;}
+        .functionIcons{margin: 0.3em 0;text-align: left;width: 100%;}
+        button.funcBtn{border: 1px solid #dedede;
+            background: #dedede;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #343434;
+            min-width: 120px;
+            padding: 0.3em;
+            margin: 0.2em;
+            font-family: helveticaLight;
+            font-size: 13px;
+        }
+        button.funcBtn:hover{background-color: #049fd9;color: #ffffff;}
+        button.funcBtn:focus,button.funcBtn:active{outline: none;}
+        button.funcBtn.disableBtn {opacity: 0.4;pointer-events: none;}
+
+        /** Toggle Switch  **/
+        .sliderText{color: #aaa;font-family: helveticaLight;font-size: 13px;}
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+            vertical-align: text-top;
+            top: -2px;
+        }
+        .switch input {height: 0;opacity: 0;width: 0;}
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        input:checked + .slider {background-color: #2196F3;}
+        input:focus + .slider {box-shadow: 0 0 1px #2196F3;}
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+        /* Rounded sliders */
+        .slider.round {border-radius: 34px;}
+        .slider.round:before {border-radius: 50%;}
+
+    </style>    
+
+    <div class='functionIcons'>
+        <button class='funcBtn' ng-class="{disableBtn : !blockView}" ng-click="runCode()">Run JavaScript</button>
+        <!-- button class='funcBtn' onclick="showCode()">Show Javascript</button-->
+        <button class='funcBtn disableBtn' ng-class="" >Save</button>
+        <button class='funcBtn' ng-class="{disableBtn : !blockView}" ng-click="restore()">Restore</button>
+        <button class='funcBtn' ng-class="{disableBtn : !blockView}" ng-click="pullVariables()">Pull Variables</button>
+        <button class='funcBtn' ng-class="{disableBtn : blockView}" ng-click="jsToBlocks()">JS To Blocks</button>
+        
+        <label class="switch"> 
+            <input type="checkbox" ng-click='toggleView($event)' checked>
+            <span class="slider round"></span>
+        </label>
+        <label class='sliderText'> Blocks to JS </label>
+    </div>
+    <div id="blocklyDiv"></div>
+    <xml id="toolbox" style="display: none">
+        <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+        <category name="If">
+            <block type="controls_if"></block>
+            <block type="controls_if">
+            <mutation else="1"></mutation>
+            </block>
+            <block type="controls_if">
+            <mutation elseif="1" else="1"></mutation>
+            </block>
+        </category>
+        <category name="Boolean" colour="%{BKY_LOGIC_HUE}">
+            <block type="logic_compare"></block>
+            <block type="logic_operation"></block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean"></block>
+            <block type="logic_null"></block>
+            <block type="logic_ternary"></block>
+        </category>
+        </category>
+        <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+            <block type="math_number">
+                <field name="NUM">10</field>
+            </block>
+            </value>
+        </block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for">
+            <field name="VAR">i</field>
+            <value name="FROM">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <value name="TO">
+            <block type="math_number">
+                <field name="NUM">10</field>
+            </block>
+            </value>
+            <value name="BY">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+        </block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
+        </category>
+        <category name="Math" colour="%{BKY_MATH_HUE}">
+        <block type="math_number">
+            <field name="NUM">123</field>
+        </block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+        <block type="math_number_property"></block>
+        <block type="math_round"></block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo"></block>
+        <block type="math_constrain">
+            <value name="LOW">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <value name="HIGH">
+            <block type="math_number">
+                <field name="NUM">100</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+            </value>
+            <value name="TO">
+            <block type="math_number">
+                <field name="NUM">100</field>
+            </block>
+            </value>
+        </block>
+        <block type="math_random_float"></block>
+        <block type="math_atan2"></block>
+        </category>
+        <category name="Text" colour="%{BKY_TEXTS_HUE}">
+                <block type="text"></block>
+                <block type="text_join"></block>
+                <block type="text_append">
+                <value name="TEXT">
+                    <shadow type="text"></shadow>
+                </value>
+                </block>
+                <block type="text_length">
+                <value name="VALUE">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_isEmpty">
+                <value name="VALUE">
+                    <shadow type="text">
+                    <field name="TEXT"></field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_indexOf">
+                <value name="VALUE">
+                    <block type="variables_get">
+                    <field name="VAR">{textVariable}</field>
+                    </block>
+                </value>
+                <value name="FIND">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_charAt">
+                <value name="VALUE">
+                    <block type="variables_get">
+                    <field name="VAR">{textVariable}</field>
+                    </block>
+                </value>
+                </block>
+                <block type="text_getSubstring">
+                <value name="STRING">
+                    <block type="variables_get">
+                    <field name="VAR">{textVariable}</field>
+                    </block>
+                </value>
+                </block>
+                <block type="text_changeCase">
+                <value name="TEXT">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_trim">
+                <value name="TEXT">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_print">
+                <value name="TEXT">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                <block type="text_prompt_ext">
+                <value name="TEXT">
+                    <shadow type="text">
+                    <field name="TEXT">abc</field>
+                    </shadow>
+                </value>
+                </block>
+                
+        </category>
+        <category name="Predefined Variables" colour="%{BKY_VARIABLES_HUE}">
+            <category name="Generic Functions">
+                <block type="error">
+                    <field name="msg">Enter Error Message</field>
+                </block>
+                <block type="fm_lookup">
+                <field name="table_name">Table Name</field>
+                <field name="output_fields">Output Columns</field>
+                <field name="condition">Where Clause</field>
+                </block>
+                <block type="fm_get">
+                <field name="array_name"></field>
+                <field name="length"></field>
+                <field name="output_fields"></field>
+                </block>
+                <block type="fm_get_parameterless">
+                <field name="db_column"></field>
+                </block>
+                <block type="fm_set">
+                <field name="field_name"></field>
+                <field name="field_value"></field>
+                </block>
+                <block type="fm_isnan">
+                    <field name="ip_value"></field>
+                </block>
+            </category>
+            <category name="User Defined Functions" colour="%{BKY_PROCEDURES_HUE}">
+
+            </category>
+        </category>
+        <category name="Lists" colour="%{BKY_LISTS_HUE}">
+        <block type="lists_create_empty"></block>
+        <block type="lists_create_with"></block>
+        <block type="lists_repeat">
+            <value name="NUM">
+            <block type="math_number">
+                <field name="NUM">5</field>
+            </block>
+            </value>
+        </block>
+        <block type="lists_length"></block>
+        <block type="lists_isEmpty"></block>
+        <block type="lists_indexOf"></block>
+        <block type="lists_getIndex"></block>
+        <block type="lists_setIndex"></block>
+        </category>
+        <category name="Generic Functions" custom="GENERIC_FUNCTIONS"></category>
+        <sep></sep>
+        <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+        </category>
+        <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+        <category name="Generic Functions">
+            <block type="error">
+                <field name="msg">Enter Error Message</field>
+            </block>
+            <block type="fm_lookup">
+                <field name="table_name">Table Name</field>
+                <field name="output_fields">Output Columns</field>
+                <field name="condition">Where Clause</field>
+            </block>
+            <block type="fm_get">
+                <field name="array_name"></field>
+                <field name="length"></field>
+                <field name="output_fields"></field>
+            </block>
+            <block type="fm_get_parameterless">
+                <field name="db_column"></field>
+            </block>
+            <block type="fm_set">
+                <field name="field_name"></field>
+                <field name="field_value"></field>
+            </block>
+            <block type="fm_isnan">
+                <field name="ip_value"></field>
+            </block>
+        </category>
+        <category name="User Defined Functions" colour="%{BKY_PROCEDURES_HUE}">
+
+        </category>
+        </category>
+    </xml>
+    <div ng-if="blockView" id='blocklyView'>
+        <div class='hint-text'>Add blocks in the workspace to generate JavaScript. </div>
+    </div>
+    <div ng-if="!blockView" id='jsView'>
+        <textarea id="console" rows="100" cols="300"></textarea>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<!-- Generating a Sample Blockly Page -->
+<html ng-app='rules-comp'>
+    <head>
+        <meta charset="utf-8">
+        <title>Blockly Demo</title>
+        <link rel="stylesheet" type="text/css" href="assets/styles.css" > 
+        <!-- Adding angular dependencies -->
+        <script src="node_modules/angular/angular.min.js"></script>
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+        <script src="blockly/blockly_compressed.js"></script>
+        <script src="blockly/blocks_compressed.js"></script>
+        <script src="blockly/javascript_compressed.js"></script>
+        <script src="blockly/msg/js/en.js"></script>    
+
+        <script src="core/blocklify_uncompressed.js"></script>
+        
+        <script src="assets/customBlocks.js"></script>
+        <script src="directive-module/rulesBlocklyComp.js"></script>
+        <script src="app.js"></script>
+        <script src="controller/rulesBlocklyController.js"></script>
+        
+    </head>
+    <body ng-controller="rulesBlocklyController">
+        <h3> Rules Blocky Component </h3>
+        <div style="width: 800px;">
+            <rules-blockly-comp></rules-blockly-comp>
+        </div>
+    </body>
+</html>
