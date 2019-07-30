@@ -1,0 +1,26 @@
+/**
+    File name: styles.css
+    Author: Abhishek H Shekara
+    Description: This file holds all the styles associated with the component - rules blockly
+**/
+@font-face {
+    font-family: helveticaLight; 
+    src: url('fonts/HelveticaNeueLTStd-Lt.otf');
+}
+@font-face {
+    font-family: helveticaMedium; 
+    src: url('fonts/HelveticaNeueLTStd-Md.otf');
+}
+body {
+    background-color: #fff;
+    font-family: helveticaLight;
+    margin: 1em;
+}
+h3{
+    font-family: helveticaLight;
+    width: 780px;
+    padding: 10px;
+    background: #acedde;
+    color: #343434;
+    box-shadow: 2px 2px 2px #efefef;
+}

@@ -1,0 +1,4 @@
+{
+    "JCPenney" : ["style_numberIN","color_codeIN","sizeIN","upc","v_color_desc","v_sports_cat","sportCatDesc","v_upc_code","v_style_code","v_color_code","conditionArrayManual","styleStr","opFields","jsLookupData","colorStr"],
+    "WilliamsSonoma" : ["size","COO","date","cost"]
+}
